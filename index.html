@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Éco-délégués — Institution Sainte-Trinité</title>
+
+  <!-- Favicon (arrondi via image source) -->
+  <link rel="icon" href="Croix-Trinitaire.png" type="image/png">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Couleurs éclaircies */
+      --bg-1: #f6fbff;           /* très clair */
+      --bg-2: #f1f8f6;           /* très clair verdâtre */
+      --glass: rgba(255,255,255,0.7);
+      --card: rgba(255,255,255,0.85);
+      --muted: #61707a;         /* texte secondaire */
+      --text: #07203a;          /* texte principal sombre */
+      --accent: #16a34a;        /* vert principal */
+      --accent-2: #0ea5e9;      /* bleu secondaire */
+      --accent-3: #ffd166;      /* jaune accent */
+      --radius: 14px;
+      --maxw: 1200px;
+      --gap: 20px;
+      --soft-shadow: 0 10px 30px rgba(8,20,40,0.06);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding:28px 18px;
+      background:
+        radial-gradient(700px 280px at 10% 10%, rgba(14,165,233,0.06), transparent 10%),
+        radial-gradient(700px 320px at 95% 85%, rgba(16,176,74,0.04), transparent 12%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      min-height:100vh;
+      position:relative;
+      overflow-y:auto;
+    }
+
+    /* texture légère */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity:0.9;
+      mix-blend-mode: overlay;
+      animation: drift 28s linear infinite;
+      z-index:0;
+    }
+    @keyframes drift{
+      0%{transform:translateY(0) translateX(0)}
+      50%{transform:translateY(-10px) translateX(12px)}
+      100%{transform:translateY(0) translateX(0)}
+    }
+
+    .wrap{
+      max-width:var(--maxw);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:var(--gap);
+      position:relative;
+      z-index:10;
+    }
+
+    /* Header */
+    header{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      justify-content:space-between;
+      position:sticky;
+      top:18px;
+      padding:14px;
+      border-radius:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82));
+      box-shadow: 0 8px 24px rgba(10,20,34,0.04);
+      border: 1px solid rgba(10,20,30,0.04);
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo-hero{
+      width:76px; height:76px;
+      border-radius:50%;
+      padding:6px;
+      display:flex;align-items:center;justify-content:center;overflow:hidden;
+      background: linear-gradient(180deg,#ffffff,#f0fbf6);
+      box-shadow: 0 8px 20px rgba(12,24,46,0.06);
+      border:1px solid rgba(15,23,42,0.04);
+      flex-shrink:0;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .logo-hero:hover{transform:translateY(-4px)}
+    .logo-hero img{
+      width:100%; height:100%; display:block; object-fit:cover; border-radius:50%;
+      border: 1px solid rgba(255,255,255,0.6); background-color: #fff;
+    }
+    .brand-title{display:flex;flex-direction:column}
+    h1{font-size:18px;margin:0;color:var(--text);font-weight:800}
+    .sub{color:var(--muted); font-size:13px}
+
+    /* Nav - desktop */
+    nav.desktop{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background:transparent;
+      padding:6px;
+      border-radius:12px;
+    }
+    nav.desktop a{
+      color:var(--text);
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+      padding:8px 12px;
+      border-radius:10px;
+      position:relative;
+      transition:all .18s ease;
+      color:var(--text);
+    }
+    nav.desktop a::after{
+      content:'';
+      position:absolute;
+      left:50%; transform:translateX(-50%);
+      bottom:-8px;
+      height:3px;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      border-radius:6px;
+      transition:width .26s cubic-bezier(.2,.9,.3,1);
+    }
+    nav.desktop a:hover{ color:var(--accent-2) }
+    nav.desktop a:hover::after{ width:60% }
+    nav.desktop a.active{ color:var(--accent); }
+    nav.desktop a.active::after{ width:70% }
+
+    /* right utilities */
+    .header-right{display:flex;align-items:center;gap:12px}
+
+    /* hamburger */
+    .hamburger{
+      display:none;
+      background:transparent;border:1px solid rgba(15,23,42,0.04);
+      width:48px;height:48px;border-radius:12px;align-items:center;justify-content:center;cursor:pointer;
+      transition:transform .14s ease, background .14s ease;
+    }
+    .hamburger .bar{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;position:relative}
+    .hamburger .bar::before,.hamburger .bar::after{content:"";position:absolute;left:0;width:22px;height:2px;background:var(--text);border-radius:2px}
+    .hamburger .bar::before{top:-7px} .hamburger .bar::after{top:7px}
+
+    /* mobile drawer */
+    .mobile-drawer{
+      position:fixed;
+      right:0;
+      top:0;
+      height:100vh;
+      width:320px;
+      max-width:90%;
+      transform:translateX(100%);
+      background:linear-gradient(180deg, #ffffff, #f6fbff);
+      box-shadow: -12px 0 40px rgba(8,20,40,0.08);
+      transition:transform .32s cubic-bezier(.2,.9,.3,1);
+      z-index:120;
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .mobile-drawer.open{transform:translateX(0)}
+    .drawer-close{align-self:flex-end;background:transparent;border:0;color:var(--muted);font-weight:700;cursor:pointer}
+    .drawer-nav{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .drawer-nav a{color:var(--text);text-decoration:none;padding:12px;border-radius:10px;background:rgba(14,165,233,0.04);font-weight:700}
+
+    .drawer-cta{margin-top:auto}
+    .overlay{
+      position:fixed;inset:0;background:linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0.25));
+      opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:110;
+    }
+    .overlay.show{opacity:1;pointer-events:auto}
+
+    main{display:grid;gap:var(--gap);margin-top:6px}
+
+    /* Hero */
+    .hero{
+      border-radius:16px;
+      padding:28px;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      flex-wrap:wrap;
+      box-shadow: 0 12px 36px rgba(8,20,34,0.04);
+      border:1px solid rgba(10,20,30,0.03);
+      background: linear-gradient(90deg, rgba(126,231,135,0.06), rgba(14,165,233,0.04));
+    }
+    .hero-left{flex:1;min-width:260px}
+    .hero-left h2{margin:0 0 8px 0;font-size:28px;color:var(--text);letter-spacing:-0.3px}
+    .hero-left p{margin:0;color:var(--muted);font-size:15px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(10,20,30,0.06);color:var(--text);
+      padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .14s ease;text-decoration:none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+    }
+    .btn.primary{background:linear-gradient(90deg,var(--accent), var(--accent-2)); color:#072027; border:none; box-shadow:0 14px 30px rgba(16,176,74,0.12);}
+
+    .hero-right{
+      min-width:220px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-direction:column;
+    }
+
+    /* grid */
+    .grid{display:grid;grid-template-columns: repeat(3,1fr);gap:18px}
+    .card{
+      background:var(--card);
+      border-radius:12px;padding:18px;min-height:110px;border:1px solid rgba(10,20,30,0.04);box-shadow:0 8px 20px rgba(8,20,34,0.04);transition:transform .18s ease;
+    }
+    .card:hover{transform:translateY(-6px)}
+    .card h3{margin:0 0 8px 0;color:var(--accent-2)}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    /* contact */
+    .contact-section{
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      padding:22px;border-radius:14px;display:grid;grid-template-columns:1fr 420px;gap:18px;align-items:start;border:1px solid rgba(10,20,30,0.04);
+    }
+    .contact-card{background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.95)); padding:16px; border-radius:12px; border:1px solid rgba(10,20,30,0.03);}
+
+    .contact-form label{display:block;font-weight:700;margin:12px 0 6px 0;font-size:13px;color:var(--text)}
+    .contact-form input, .contact-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(10,20,30,0.06);font-size:14px;background:transparent;color:var(--text)}
+
+    /* footer */
+    footer{color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px;margin-top:6px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.94));border:1px solid rgba(10,20,30,0.03);box-shadow:0 8px 24px rgba(8,20,34,0.04);flex-wrap:wrap}
+    .footer-col{display:flex;flex-direction:column;gap:8px}
+    .small-muted{color:var(--muted);font-size:13px}
+
+    /* top button */
+    #topBtn{position:fixed;right:20px;bottom:20px;width:56px;height:56px;background:linear-gradient(180deg,var(--accent), var(--accent-2));color:#072027;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 36px rgba(8,20,34,0.08);border:none;cursor:pointer;transform:translateY(120px);transition:transform .32s cubic-bezier(.2,.9,.3,1),opacity .2s;opacity:0;z-index:60}
+    #topBtn.visible{transform:translateY(0); opacity:1}
+
+    /* responsive */
+    @media (max-width:980px){
+      .grid{grid-template-columns: repeat(2,1fr)}
+      .contact-section{grid-template-columns:1fr}
+      nav.desktop{display:none}
+      .hamburger{display:flex}
+    }
+    @media (max-width:640px){
+      .grid{grid-template-columns:1fr}
+      .logo-hero{width:56px;height:56px}
+      h1{font-size:16px}
+      .hero-left h2{font-size:20px}
+      header{padding:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="page">
+    <header>
+      <div class="brand" style="align-items:center">
+        <div class="logo-hero" title="Institution Sainte-Trinité - Éco-délégués">
+          <a href="https://www.sainte-trinite.fr" target="_blank" rel="noopener noreferrer" aria-label="Aller vers le site de l'Institution Sainte-Trinité">
+            <img id="logoImg" alt="Logo Croix Trinitaire" src="Croix-Trinitaire.png">
+          </a>
+        </div>
+
+        <div class="brand-title">
+          <h1>Éco‑délégués — Sainte‑Trinité</h1>
+          <div class="sub">Agir ensemble pour un établissement durable</div>
+        </div>
+      </div>
+
+      <!-- Desktop nav -->
+      <nav class="desktop" aria-label="Navigation principale">
+        <a href="#qui" class="active">Qui sommes-nous ?</a>
+        <a href="#commissions">Commissions</a>
+        <a href="#projets">Projets</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-right">
+        <!-- small eco logo (optional) -->
+        <a href="#hero" title="Éco-Trinité" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit">
+          <img src="LogoOfficiel EcoTrinite.png" alt="Logo Éco-Trinité" style="height:90px;border-radius:45px;object-fit:contain;box-shadow:0 8px 20px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04)">
+        </a>
+
+        <!-- Hamburger -->
+        <button id="hamburgerBtn" class="hamburger" aria-expanded="false" aria-controls="mobileDrawer" aria-label="Ouvrir le menu">
+          <span class="bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile drawer -->
+    <div id="mobileDrawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+      <button class="drawer-close" id="drawerCloseBtn" aria-label="Fermer le menu">Fermer ✕</button>
+      <nav class="drawer-nav" aria-label="Navigation mobile">
+        <a href="#qui" data-target="qui">Qui sommes-nous ?</a>
+        <a href="#commissions" data-target="commissions">Commissions</a>
+        <a href="#projets" data-target="projets">Projets</a>
+        <a href="#annonces" data-target="annonces">Les ptites annonces</a>
+        <a href="#contact" data-target="contact">Contact</a>
+      </nav>
+      <div class="drawer-cta">
+        <a class="btn primary" href="#contact">Nous contacter</a>
+      </div>
+    </div>
+    <div id="drawerOverlay" class="overlay" tabindex="-1" aria-hidden="true"></div>
+
+    <main>
+      <section class="hero" id="hero" aria-labelledby="hero-title">
+        <div class="hero-left">
+          <h2 id="hero-title">Bienvenue aux Éco‑délégués</h2>
+          <p>Collectif d'élèves volontaires soutenus par l'équipe pédagogique et notre documentaliste — actions concrètes : réduction des déchets, compost, serre pédagogique et sensibilisation.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#commissions">Voir nos commissions</a>
+            <button class="btn" onclick="downloadPresentation()">Télécharger la fiche</button>
+            <a class="btn" href="https://www.sainte-trinite.fr" target="_blank" rel="noopener">Site de l'établissement</a>
+          </div>
+        </div>
+
+        <div class="hero-right" aria-hidden="false">
+          <div style="text-align:right; width:100%">
+            <div class="small-muted">Suivez-nous</div>
+            <div class="socials" style="margin-top:12px; justify-content:flex-end">
+              <a class="btn" style="padding:8px 10px" href="https://www.instagram.com/institution_sainte_trinite_off/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Institution Sainte-Trinité">Instagram</a>
+              <a class="btn" style="padding:8px 10px" href="https://www.facebook.com/institution.sainte.trinite.marseille" target="_blank" rel="noopener noreferrer" aria-label="Facebook Institution Sainte-Trinité">Facebook</a>
+            </div>
+            <div style="margin-top:14px;font-size:13px;color:var(--muted)"><strong style="color:var(--accent)">Prochaine action :</strong> Défi Écologique — Rendre l'école plus verte </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="qui" class="card" aria-labelledby="qui-title">
+        <h3 id="qui-title">Qui sommes-nous ?</h3>
+        <p>Les éco‑délégués de l'Institution Sainte‑Trinité sont des élèves volontaires soutenus par l'équipe pédagogique et la documentaliste. Nous concevons et réalisons des projets pour rendre l'établissement plus durable : prévention du gaspillage, compost, serre pédagogique et actions de sensibilisation à tous les niveaux.</p>
+      </section>
+
+      <section id="commissions" style="display:grid;gap:12px" aria-labelledby="commissions-title">
+        <h3 id="commissions-title" style="margin:0 0 6px 0">Nos commissions</h3>
+
+        <div class="grid" role="list">
+          <article class="card" role="listitem">
+            <h3>Communication externe</h3>
+            <p>Gestion du site, des réseaux et valorisation des actions.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3>Communication interne</h3>
+            <p>Affichage, newsletter, messages et coordination avec la vie scolaire.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3>Réduction des déchets</h3>
+            <p>Tri à la cantine, suivi du gaspillage et solutions pour diminuer les emballages.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3>Serre pédagogique</h3>
+            <p>Mini‑serre autonome : capteurs, arrosage et projets technologiques.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <h3>Sensibilisation</h3>
+            <p>Ateliers, interventions en classe et défis inter‑classes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="projets" class="card" aria-labelledby="projets-title">
+        <h3 id="projets-title">Projets récents</h3>
+        <p>Serre connectée, compost collectif, marche zéro déchets, atelier création d'affiches et kit de sensibilisation distribué aux classes.</p>
+      </section>
+      
+      <section id="annonces" class="card" aria-labelledby="projets-title">
+        <h3 id="annonces">Les p'tites annonces</h3>
+        <p><section id="annonces" class="card" aria-labelledby="projets-title">
+        <h3 id="projets-title">Serre connectée via Arduino</h3>
+        <p>Bonjour, nous avons le plaisir de vous présenter un projet éco-trinitaire, initié par Mme Clerc, et avec l’aide de notre professeur de technologie. Ce projet est une serre connectée (comme vous pouvez le voir sur les images incluses). Ce projet a pour but, grâce à des capteurs d’humidité et à une carte Wi-Fi ESP32, d’arroser automatiquement les plantes présentes dans la serre et qui, à taille réelle, pourrait arroser les potagers de notre établissement. Cette mini-serre connectée se trouve actuellement en salle de technologie, où les collégiens trinitaires peuvent observer la croissance de notre projet. Cette serre connectée fonctionne de telle manière que l’on puisse connaître la température de la serre, savoir quand il faut remplir le réservoir d’eau et quand il faut arroser les plantes (ce qui se fait de manière automatique). Nous pouvons régler la serre à notre convenance via un logiciel mis en place par notre professeur de technologie et un éco-délégué. Le projet a été mis en place par la commission éco-délégués responsable de ce projet. Il a pu être mis en place grâce à Mme Clerc et à notre professeur de technologie que nous remercions chaleureusement ! À bientôt pour de nouveaux projets éco-trinitaires !</p>
+      </section></p>
+      </section>
+
+      <!-- Contact full section -->
+      <section id="contact" class="contact-section" aria-labelledby="contact-title">
+        <div>
+          <div class="contact-info">
+            <h3 id="contact-title">Contactez-nous</h3>
+            <p class="small-muted">Coordination élèves & professeurs : <strong style="color:var(--accent)">cdi.lycee@sainte-trinite.fr</strong></p>
+            <p class="small-muted">Professeur documentaliste du lycée : <strong style="color:var(--accent)">Mme Clerc V.</strong></p>
+            <p class="small-muted">Pour rejoindre une commission, parlez‑en à la documentaliste ou utilisez le formulaire.</p>
+
+            <div style="margin-top:14px" class="contact-card">
+              <strong>Adresse</strong>
+              <div class="small-muted" style="margin-top:8px">Institution Sainte‑Trinité — 55 Av du Maréchal de Lattre de Tassigny, 13009 Marseille</div>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="contact-card contact-form">
+            <form id="contactForm">
+              <label for="name">Nom</label>
+              <input id="name" name="name" placeholder="Votre nom" required>
+
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="votre@email.com" required>
+
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="6" placeholder="Je souhaite rejoindre les éco‑délégués..." required></textarea>
+
+              <button type="submit" class="btn primary">Envoyer</button>
+            </form>
+            <div style="margin-top:10px; font-size:12px; color:var(--muted)">
+              Le formulaire ouvrira votre client mail (mailto) vers <strong>cdi.lycee@sainte-trinite.fr</strong>. Vous pouvez aussi écrire directement à Mme Clerc V.
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <footer>
+        <div class="footer-col">
+          <div style="font-weight:800">Institution Sainte‑Trinité — Éco‑délégués</div>
+          <div class="small-muted">© <span id="year"></span> Tous droits réservés</div>
+        </div>
+
+        <div class="footer-col" style="align-items:flex-end">
+          <div class="socials">
+            <a class="btn" href="https://www.instagram.com/institution_sainte_trinite_off/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Institution Sainte-Trinité">Instagram</a>
+            <a class="btn" href="https://www.facebook.com/institution.sainte.trinite.marseille" target="_blank" rel="noopener noreferrer" aria-label="Facebook Institution Sainte-Trinité">Facebook</a>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Top button -->
+  <button id="topBtn" aria-label="Remonter en haut" title="Remonter">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M6 15l6-6 6 6" stroke="#072027" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Top button logic
+    const topBtn = document.getElementById('topBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 220) topBtn.classList.add('visible'); else topBtn.classList.remove('visible');
+    });
+    topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+    // Mobile drawer interactions
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+
+    function openDrawer(){
+      mobileDrawer.classList.add('open');
+      mobileDrawer.setAttribute('aria-hidden','false');
+      hamburgerBtn.setAttribute('aria-expanded','true');
+      drawerOverlay.classList.add('show');
+      drawerOverlay.setAttribute('aria-hidden','false');
+      mobileDrawer.focus();
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(){
+      mobileDrawer.classList.remove('open');
+      mobileDrawer.setAttribute('aria-hidden','true');
+      hamburgerBtn.setAttribute('aria-expanded','false');
+      drawerOverlay.classList.remove('show');
+      drawerOverlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      hamburgerBtn.focus();
+    }
+
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = mobileDrawer.classList.contains('open');
+      if(isOpen) closeDrawer(); else openDrawer();
+    });
+    drawerCloseBtn.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
+
+    // close drawer on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileDrawer.classList.contains('open')) closeDrawer();
+    });
+
+    // drawer navigation links (smooth scroll + close)
+    mobileDrawer.querySelectorAll('a[data-target]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = a.getAttribute('data-target');
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({behavior:'smooth'});
+        closeDrawer();
+      });
+    });
+
+    // Smooth scroll for desktop nav links
+    document.querySelectorAll('nav.desktop a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        // toggle active class
+        document.querySelectorAll('nav.desktop a').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    // Download placeholder
+    function downloadPresentation(){
+      const content = [
+        "Éco-délégués — Institution Sainte-Trinité",
+        "",
+        "Commissions :",
+        "- Communication externe",
+        "- Communication interne",
+        "- Réduction déchets à la cantine",
+        "- Serre automatisée",
+        "- Sensibilisation",
+        "",
+        "Contact CDI : cdi.lycee@sainte-trinite.fr (Mme Clerc V.)"
+      ].join("\n");
+      const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'fiche-eco-delegues.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Contact form -> mailto (to CDI address)
+    document.getElementById('contactForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const nameVal = document.getElementById('name').value.trim();
+      const emailVal = document.getElementById('email').value.trim();
+      const messageVal = document.getElementById('message').value.trim();
+
+      const name = encodeURIComponent(nameVal);
+      const email = encodeURIComponent(emailVal);
+      const subject = encodeURIComponent('Contact Éco-délégués — ' + (nameVal || 'Nouvelle demande'));
+      const body = encodeURIComponent('Nom: ' + (nameVal || '') + '\nEmail: ' + (emailVal || '') + '\n\n' + (messageVal || ''));
+      const mailto = 'mailto:cdi.lycee@sainte-trinite.fr?subject=' + subject + '&body=' + body;
+      window.location.href = mailto;
+    });
+
+    // If logo image missing, replace by initials
+    const logoImg = document.getElementById('logoImg');
+    if (logoImg) {
+      logoImg.addEventListener('error', () => {
+        const link = logoImg.closest('a');
+        logoImg.style.display = 'none';
+        if (!document.getElementById('logoInitials')) {
+          const initials = document.createElement('div');
+          initials.id = 'logoInitials';
+          initials.style.width = '100%';
+          initials.style.height = '100%';
+          initials.style.display = 'flex';
+          initials.style.alignItems = 'center';
+          initials.style.justifyContent = 'center';
+          initials.style.fontWeight = '800';
+          initials.style.fontSize = '18px';
+          initials.style.color = 'var(--text)';
+          initials.textContent = 'ÉT';
+          if (link) link.appendChild(initials); else logoImg.parentElement.appendChild(initials);
+        }
+      });
+    }
+
+    // ensure drawer closes on large resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 980 && mobileDrawer.classList.contains('open')) closeDrawer();
+    });
+
+    // click outside mobile drawer closes it (enhanced)
+    document.addEventListener('click', (e) => {
+      if (mobileDrawer.classList.contains('open') && !mobileDrawer.contains(e.target) && !hamburgerBtn.contains(e.target) && !drawerOverlay.contains(e.target)) {
+        closeDrawer();
+      }
+    });
+  </script>
+  <script>
+  function showEcoInitials(){
+    if (document.getElementById('ecoInitials')) return;
+    const anchor = document.querySelector('.header-right a[href="#hero"]') || document.querySelector('.header-right a');
+    if (!anchor) return;
+    const div = document.createElement('div');
+    div.id = 'ecoInitials';
+    div.textContent = 'ET'; // ou 'ÉT' si vous préférez
+    Object.assign(div.style, {
+      width: '70px',
+      height: '70px',
+      borderRadius: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontWeight: '800',
+      fontSize: '18px',
+      color: 'var(--text)',
+      background: 'linear-gradient(180deg,#ffffff,#f0fbf6)',
+      boxShadow: '0 8px 20px rgba(0,0,0,0.06)',
+      border: '1px solid rgba(0,0,0,0.04)'
+    });
+    anchor.appendChild(div);
+  }
+  // (optionnel) log utile pour debug
+  document.getElementById('ecoLogo')?.addEventListener('error', () => console.warn('ecoLogo failed to load: check path / filename'));
+</script>
+</body>
+</html>
